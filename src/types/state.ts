@@ -15,4 +15,5 @@ export interface AppState {
   currentReviews: Review[];
   isLoadingReviews: boolean;
   isLoadingCurrentOffer: boolean;
+  favoriteOffers: AccomodationOffer[];
 }

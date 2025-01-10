@@ -14,7 +14,8 @@ import { AppDispatch } from '../../store/index.ts';
 import { checkAuth } from '../../action.ts';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/index.ts';
-import Spinner from '../spinner/spinner.tsx';
+import { AuthorizationStatus } from '../../const.ts';
+import { fetchFavoritesAction } from '../../action.ts';
 
 function App(): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
@@ -23,13 +24,19 @@ function App(): JSX.Element {
   );
 
   useEffect(() => {
-    dispatch(checkAuth()); // Check user's authorization status on app load
+    dispatch(checkAuth());
+    if (authorizationStatus === AuthorizationStatus.Auth) {
+      dispatch(fetchFavoritesAction());
+    }
+  }, [authorizationStatus, dispatch]);
+
+  useEffect(() => {
+    dispatch(checkAuth());
   }, [dispatch]);
 
-  // Show a spinner while checking authorization
-  if (authorizationStatus === 'UNKNOWN') {
-    return <Spinner />;
-  }
+  // if (authorizationStatus === 'UNKNOWN') {
+  //   return <Spinner />;
+  // }
 
   return (
     <HelmetProvider>

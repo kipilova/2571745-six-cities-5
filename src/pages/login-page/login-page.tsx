@@ -81,7 +81,6 @@ function LoginPage(): JSX.Element {
           <section className="login">
             <h1 className="login__title">Sign in</h1>
             <form className="login__form form" onSubmit={handleSubmit}>
-              
               {errorMessage && (
                 <div className="login__error-message">
                   <p style={{ color: 'red' }}>{errorMessage}</p>

@@ -10,15 +10,13 @@ const selectSortType = (state: RootState) => state.sortType;
 export const selectOffersForCity = createSelector(
   [selectOffersList, selectCurrentCity],
   (offersList, currentCity) =>
-    offersList.filter(
-      (offer) => offer.city.name === currentCity,
-    ),
+    offersList.filter((offer) => offer.city.name === currentCity),
 );
 
 export const selectOffersSorted = createSelector(
   [selectOffersForCity, selectSortType],
-  (cityOffers, sortType) => {
-    return [...cityOffers].sort((a, b) => {
+  (cityOffers, sortType) =>
+    [...cityOffers].sort((a, b) => {
       switch (sortType) {
         case 'price-asc':
           return a.price - b.price;
@@ -29,8 +27,7 @@ export const selectOffersSorted = createSelector(
         default:
           return 0;
       }
-    });
-  }
+    }),
 );
 
 export const selectCurrentOffer = (state: RootState) => state.currentOffer;

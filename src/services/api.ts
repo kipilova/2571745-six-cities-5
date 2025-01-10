@@ -21,7 +21,6 @@ export const createAPI = (): AxiosInstance => {
     (response) => response,
     (error) => {
       if (error.response?.status === 401) {
-        console.warn('User is unauthorized. Proceeding without authorization.');
         store.dispatch(
           setAuthorizationStatusAction(AuthorizationStatus.NoAuth),
         );

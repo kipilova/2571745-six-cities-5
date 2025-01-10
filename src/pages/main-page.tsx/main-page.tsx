@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { setCurrentCityAction, setSortTypeAction } from '../../action';
-import { selectOffersForCity } from '../../selector';
+import { selectOffersForCity, selectOffersSorted } from '../../selector';
 import { cities } from '../../mocks/cities';
 import { AppDispatch } from '../../store';
 import { useEffect } from 'react';
@@ -20,6 +20,7 @@ function MainPage(): JSX.Element {
   const offers = useSelector(selectOffersForCity);
   const isLoading = useSelector((state: RootState) => state.isLoading);
   const sortType = useSelector((state: RootState) => state.sortType);
+  const sortedOffers = useSelector(selectOffersSorted);
   const [selectedOfferId, setSelectedOfferId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -98,7 +99,10 @@ function MainPage(): JSX.Element {
 
               <Sorting currentSort={sortType} onSortChange={handleSortChange} />
 
-              <OfferList onCardHover={setSelectedOfferId} />
+              <OfferList
+                offers={sortedOffers}
+                onCardHover={setSelectedOfferId}
+              />
             </section>
             <div className="cities__right-section">
               <Map

@@ -5,7 +5,7 @@ export type Review = {
     name: string;
     avatarUrl: string;
     isPro: boolean;
-  }
+  };
   comment: string;
   rating: number;
 };

@@ -14,7 +14,7 @@ function Review({ review }: ReviewProps): JSX.Element {
   return (
     <li className="reviews__item">
       <div className="reviews__user user">
-      <div
+        <div
           className={`offer__avatar-wrapper ${
             user.isPro ? 'offer__avatar-wrapper--pro' : ''
           }`}

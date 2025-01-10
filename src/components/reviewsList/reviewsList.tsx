@@ -13,10 +13,15 @@ function ReviewsList(): JSX.Element {
   const reviews = useSelector(selectReviews);
 
   useEffect(() => {
-      if (offerId) {
-        dispatch(loadReviewsAction(offerId));
-      }
-    }, [dispatch, offerId]);
+    if (offerId) {
+      dispatch(loadReviewsAction(offerId));
+    }
+  }, [dispatch, offerId]);
+
+  // if (!Array.isArray(reviews)) {
+  //   console.error('Expected reviews to be an array, but received:', reviews);
+  //   return <p>No reviews available.</p>;
+  // }
 
   return (
     <ul className="reviews__list">

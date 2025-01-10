@@ -21,7 +21,7 @@ export const loadOffersAction = createAsyncThunk<
   undefined,
   { extra: AxiosInstance }
 >('data/loadOffers', async (_, { extra: api, rejectWithValue }) => {
-  console.log('Extra argument (API):', api);
+  // console.log('Extra argument (API):', api);
   try {
     const { data } = await api.get<AccomodationOffer[]>('/offers');
     return data;
@@ -54,7 +54,7 @@ export const loginAction = createAsyncThunk<
 
       const response = await api.post('/login', { email, password });
       const { data } = response;
-      console.log('Full Login Response:', data);
+      // console.log('Full Login Response:', data);
 
       localStorage.setItem('six-cities-token', data.token);
       api.defaults.headers.common['X-Token'] = data.token;
@@ -63,7 +63,7 @@ export const loginAction = createAsyncThunk<
       return response.status;
     } catch (error) {
       const axiosError = error as AxiosError;
-    //   console.error('Login failed:', error);
+      //   console.error('Login failed:', error);
       const errorMessage =
         (axiosError.response?.data as any)?.message || 'Failed to login';
       dispatch(setAuthorizationStatusAction(AuthorizationStatus.NoAuth));
@@ -92,10 +92,14 @@ export const loadOfferDetailsAction = createAsyncThunk<
   { extra: AxiosInstance }
 >('data/loadOfferDetails', async (offerId, { extra: api, rejectWithValue }) => {
   try {
-    const { data: offer } = await api.get<AccomodationOffer>(`/offers/${offerId}`);
-    const { data: nearbyOffers } = await api.get<AccomodationOffer[]>(`/offers/${offerId}/nearby`);
-    console.log('Fetched Offer:', offer);
-    console.log('Nearby Offers:', nearbyOffers);
+    const { data: offer } = await api.get<AccomodationOffer>(
+      `/offers/${offerId}`,
+    );
+    const { data: nearbyOffers } = await api.get<AccomodationOffer[]>(
+      `/offers/${offerId}/nearby`,
+    );
+    // console.log('Fetched Offer:', offer);
+    // console.log('Nearby Offers:', nearbyOffers);
     return { offer, nearbyOffers };
   } catch (error) {
     return rejectWithValue('Failed to load offer details');
@@ -109,7 +113,7 @@ export const loadReviewsAction = createAsyncThunk<
 >('data/loadComments', async (offerId, { extra: api, rejectWithValue }) => {
   try {
     const { data } = await api.get<Review[]>(`/comments/${offerId}`);
-    console.log(data)
+    // console.log(data);
     return data;
   } catch (error) {
     return rejectWithValue('Failed to load comments');
@@ -132,5 +136,36 @@ export const postReviewAction = createAsyncThunk<
     } catch (error) {
       return rejectWithValue('Failed to post comment');
     }
-  }
+  },
 );
+
+export const toggleFavoriteAction = createAsyncThunk<
+  AccomodationOffer,
+  { offerId: string; status: number },
+  { extra: AxiosInstance }
+>(
+  'favorites/toggleFavorite',
+  async ({ offerId, status }, { extra: api, rejectWithValue }) => {
+    try {
+      const { data } = await api.post<AccomodationOffer>(
+        `/favorite/${offerId}/${status}`,
+      );
+      return data;
+    } catch (error) {
+      return rejectWithValue('Failed to update favorite status');
+    }
+  },
+);
+
+export const fetchFavoritesAction = createAsyncThunk<
+  AccomodationOffer[],
+  void,
+  { extra: AxiosInstance }
+>('favorites/fetchFavorites', async (_, { extra: api, rejectWithValue }) => {
+  try {
+    const { data } = await api.get<AccomodationOffer[]>(`/favorite`);
+    return data;
+  } catch (error) {
+    return rejectWithValue('Failed to fetch favorites');
+  }
+});

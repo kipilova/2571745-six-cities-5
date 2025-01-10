@@ -1,12 +1,29 @@
-import Card from '../../components/card/card';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import Header from '../../components/header/header';
+import OfferList from '../../components/offersList/offersList';
+import { AccomodationOffer } from '../../types/offer';
 
 function FavoritesPage(): JSX.Element {
-  const favoriteOffers = useSelector((state: RootState) =>
-    state.offersList.filter((offer) => offer.isFavorite),
+  // const favoriteOffers = useSelector((state: RootState) => state.offersList.filter((offer) => offer.isFavorite));
+  const favoriteOffers = useSelector(
+    (state: RootState) => state.favoriteOffers,
   );
+
+  const groupedFavorites = favoriteOffers.reduce(
+    (acc, offer) => {
+      if (!acc[offer.city.name]) {
+        acc[offer.city.name] = [];
+      }
+      acc[offer.city.name].push(offer);
+      return acc;
+    },
+    {} as Record<string, AccomodationOffer[]>,
+  );
+
+  // const handleTitleClick = (id: string) => {
+  //   navigate(`/offer/${id}`);
+  // };
 
   return (
     <div className="page">
@@ -16,21 +33,26 @@ function FavoritesPage(): JSX.Element {
         <div className="page__favorites-container container">
           <section className="favorites">
             <h1 className="favorites__title">Saved listing</h1>
-            <ul className="favorites__list">
-              {favoriteOffers.map((favorite) => (
-                <li key={favorite.id} className="favorites__locations-items">
-                  <div className="favorites__locations">
-                    <div className="favorites__locations-item">
-                      <Card
-                        accomodationOffer={favorite}
-                        onMouseEnter={() => {}}
-                        onMouseLeave={() => {}}
-                      />
+            {Object.entries(groupedFavorites).length > 0 ? (
+              <ul className="favorites__list">
+                {Object.entries(groupedFavorites).map(([city, offers]) => (
+                  <li key={city} className="favorites__locations-items">
+                    <div className="favorites__locations locations locations--current">
+                      <div className="locations__item">
+                        <a className="locations__item-link" href="#">
+                          <span>{city}</span>
+                        </a>
+                      </div>
                     </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
+                    <div className="favorites__places">
+                      <OfferList offers={offers} onCardHover={() => {}} />
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>Nothing yet saved.</p>
+            )}
           </section>
         </div>
       </main>

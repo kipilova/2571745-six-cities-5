@@ -28,6 +28,6 @@ export interface AccomodationOffer {
     isPro: boolean;
     name: string;
     avatarUrl: string;
-  }
+  };
   description?: string;
 }

@@ -7,15 +7,18 @@ import { signOutAction } from '../../action';
 function Header(): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleSignOut = () => {
-    dispatch(signOutAction());
-  };
-
   const userEmail = useSelector((state: RootState) => state.userEmail);
-
+  // console.log("EMAIL:", userEmail);
   const authorizationStatus = useSelector(
     (state: RootState) => state.authorizationStatus,
   );
+  const favoriteCount = useSelector(
+    (state: RootState) => state.favoriteOffers.length,
+  );
+
+  const handleSignOut = () => {
+    dispatch(signOutAction());
+  };
 
   return (
     <header className="header">
@@ -46,7 +49,9 @@ function Header(): JSX.Element {
                       <span className="header__user-name user__name">
                         {userEmail}
                       </span>
-                      <span className="header__favorite-count">3</span>
+                      <span className="header__favorite-count">
+                        {favoriteCount}
+                      </span>
                     </Link>
                   </li>
                   <li className="header__nav-item">
